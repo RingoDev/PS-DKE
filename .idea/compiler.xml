@@ -9,5 +9,8 @@
         <module name="coreNLP" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="coreNLP" target="16" />
+    </bytecodeTargetLevel>
   </component>
 </project>
