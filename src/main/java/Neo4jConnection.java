@@ -2,10 +2,10 @@ import org.neo4j.driver.*;
 
 import static org.neo4j.driver.Values.parameters;
 
-public class HelloWorldExample implements AutoCloseable {
+public class Neo4jConnection implements AutoCloseable {
     private final Driver driver;
 
-    public HelloWorldExample(String uri, String user, String password) {
+    public Neo4jConnection(String uri, String user, String password) {
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
@@ -14,12 +14,9 @@ public class HelloWorldExample implements AutoCloseable {
         driver.close();
     }
 
-    public void printGreeting(final String object1, final String relation, final String object2) {
+    public void insertTriple(final String object1, final String relation, final String object2) {
         try (Session session = driver.session()) {
             session.writeTransaction(tx -> {
-//                    Result result = tx.run("CREATE (a:Greeting) " +
-//                                    "SET a.message = $message " +
-//                                    "RETURN a.message + ', from node ' + id(a)",
 
                 String cleanRelation = relation.replace("'", "").replace(" ","_");
                 String cleanObject1 = object1.replace("'","").replace(" ", "_");

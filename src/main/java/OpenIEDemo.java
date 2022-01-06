@@ -21,8 +21,8 @@ public class OpenIEDemo {
             // Iterate over the triples in the sentence
             for (RelationTriple triple : sent.openieTriples()) {
 
-                try (HelloWorldExample greeter = new HelloWorldExample("bolt://localhost:7687", "neo4j", "password")) {
-                    greeter.printGreeting(triple.subjectLemmaGloss(),
+                try (Neo4jConnection connection = new Neo4jConnection("bolt://localhost:7687", "neo4j", "password")) {
+                    connection.insertTriple(triple.subjectLemmaGloss(),
                             triple.relationLemmaGloss(),
                             triple.objectLemmaGloss());
                 } catch (Exception e) {

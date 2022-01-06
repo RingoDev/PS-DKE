@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/coreNLP.iml" filepath="$PROJECT_DIR$/coreNLP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/coreNLP.iml" filepath="$PROJECT_DIR$/.idea/coreNLP.iml" />
     </modules>
   </component>
 </project>
