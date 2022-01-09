@@ -21,7 +21,7 @@ public class Neo4jConnection implements AutoCloseable {
                 String cleanRelation = relation.replace("'", "").replace(" ","_");
                 String cleanObject1 = object1.replace("'","").replace(" ", "_");
                 String cleanObject2 = object2.replace("'","").replace(" ", "_");
-                Result result = tx.run("MERGE (object:Object {name: $object})\n" +
+                tx.run("MERGE (object:Object {name: $object})\n" +
                                 "MERGE (object2:Object {name: $object2})\n" +
                                 "MERGE (object)-[:" + cleanRelation + "]->(object2)",
                         parameters("object", cleanObject1, "object2", cleanObject2));

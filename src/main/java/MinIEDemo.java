@@ -3,6 +3,7 @@ import de.uni_mannheim.minie.annotation.AnnotatedProposition;
 import de.uni_mannheim.utils.coreNLP.CoreNLPUtils;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.washington.cs.knowitall.nlp.extraction.ChunkedBinaryExtraction;
 
 import java.util.Arrays;
 
@@ -21,23 +22,35 @@ public class MinIEDemo {
                 """;
 
 
-        for (String sentence : Arrays.stream(text.split("\\.")).map(x -> x + ".").toList()) {
-            // Generate the extractions (With SAFE mode)
-            MinIE minie = new MinIE(sentence, parser, MinIE.Mode.SAFE);
+        try (Neo4jConnection connection = new Neo4jConnection("bolt://localhost:7687", "neo4j", "test")) {
+            for (String sentence : Arrays.stream(text.split("\\.")).map(x -> x + ".").toList()) {
+                // Generate the extractions (With SAFE mode)
+                MinIE minie = new MinIE(sentence, parser, MinIE.Mode.COMPLETE);
 
-            // Print the extractions
-            System.out.println("\nInput sentence: " + sentence);
-            System.out.println("=============================");
-            System.out.println("Extractions:");
-            for (AnnotatedProposition ap : minie.getPropositions()) {
-                System.out.println("\tTriple: " + ap.getTripleAsString());
-                System.out.print("\tFactuality: " + ap.getFactualityAsString());
-                if (ap.getAttribution().getAttributionPhrase() != null)
-                    System.out.print("\tAttribution: " + ap.getAttribution().toStringCompact());
-                else
-                    System.out.print("\tAttribution: NONE");
-                System.out.println("\n\t----------");
+                // Print the extractions
+                System.out.println("\nInput sentence: " + sentence);
+                System.out.println("=============================");
+                System.out.println("Extractions:");
+                for (AnnotatedProposition ap : minie.getPropositions()) {
+                    connection.insertTriple(
+                            ap.getTriple().get(0).toString(),
+                            ap.getTriple().get(1).toString(),
+                            ap.getTriple().get(2).toString());
+
+
+                    System.out.println("\tTriple: " + ap.getTripleAsString());
+                    System.out.print("\tFactuality: " + ap.getFactualityAsString());
+                    if (ap.getAttribution().getAttributionPhrase() != null)
+                        System.out.print("\tAttribution: " + ap.getAttribution().toStringCompact());
+                    else
+                        System.out.print("\tAttribution: NONE");
+                    System.out.println("\n\t----------");
+                }
             }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         System.out.println("\n\nDONE!");
